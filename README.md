@@ -1,92 +1,322 @@
-# 📊 DataSense: An Intelligent Data Visualization and Story Generator
+# 📊 DataSense: Transform Raw Data into Beautiful Visualizations & Stories
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-streamlit-app-url.com) **Tired of manually exploring data and struggling to find the right visualization? Let DataSense do the heavy lifting!**
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-streamlit-app-url.com)
+[![vLLM](https://img.shields.io/badge/powered%20by-vLLM-green.svg)](https://vllm.ai/)
+[![Plotly](https://img.shields.io/badge/visualized%20with-Plotly-blue.svg)](https://plotly.com/)
 
-DataSense leverages the power of Large Language Models (LLMs) to automatically analyze your datasets, recommend the most insightful visualizations, and generate compelling data stories. Go from raw data to beautiful, understandable visuals and narratives in just a few clicks.
+> **Tired of manually exploring data and struggling to find the right visualization? Let DataSense do the heavy lifting!**
 
-![DataSense Screenshot Placeholder](https://placehold.co/800x400/E2E8F0/4A5568?text=DataSense+App+Screenshot)
-*(Replace the placeholder above with an actual screenshot of your running application)*
+DataSense harnesses the collective intelligence of multiple Large Language Models to automatically analyze your datasets, recommend the most impactful visualizations, and generate compelling data narratives—all in a sleek, easy-to-use interface.
 
----
+![DataSense App Screenshot](./assets/datasense.png)
 
-## ✨ Features
+## 🌟 Why DataSense?
 
-* **Multi-Format Data Input:** Upload your data as CSV, JSON, or TXT files, or choose from built-in sample datasets (powered by scikit-learn).
-* **Automated Data Analysis:** DataSense automatically preprocesses your data (handling types, cleaning names) and performs initial statistical analysis.
-* **LLM-Powered Insights:** Utilizes state-of-the-art LLMs to understand the nuances of your data and identify key patterns, correlations, and distributions.
-* **Ensemble Recommendations:** Employs a configurable ensemble of multiple LLMs (e.g., Llama 3.1, Qwen 2.5, Phi-3) with majority voting (pass@k sampling) for diverse perspectives and robust visualization suggestions.
-* **Top Visualization Suggestions:** Recommends not just one, but the top 1-3 most suitable visualization types based on LLM consensus.
-* **Engaging Data Storytelling:** Generates clear, narrative data stories that explain the insights revealed by the recommended visualization, making complex data understandable.
-* **Interactive Visualizations:** Creates beautiful, interactive plots using Plotly Express and Plotly Graph Objects.
-* **Manual Explorer:** Allows users to manually select and generate any suitable visualization type identified during the analysis phase.
-* **Configurable LLM Backend:**
-    * Choose which LLMs to include in the ensemble via `config.yaml`.
-    * Select loading strategy: `sequential` (less VRAM) or `concurrent` (faster, more VRAM).
-    * Configure GPU utilization.
-* **User-Friendly Web Interface:** Built with Streamlit for an intuitive and interactive user experience, including progress indicators during analysis.
+Most data visualization tools make YOU do the work of deciding which charts to use. DataSense flips this model by:
 
----
+- **Analyzing your data automatically** - understanding relationships, patterns, and outliers
+- **Recommending the best visualizations** - using an ensemble of LLMs to vote on the most insightful chart types
+- **Generating explanatory narratives** - creating readable stories that explain what your data means
+- **Requiring zero coding** - just upload your data and click "Analyze"
 
-## 🚀 Technology Stack
+Perfect for data scientists, business analysts, students, researchers, and anyone who works with data!
 
-* **Backend:** Python 3.9+
-* **LLM Inference:** [vLLM](https://github.com/vllm-project/vllm)
-* **LLM Models:** [Hugging Face Transformers](https://huggingface.co/docs/transformers/index) (for tokenizers, supports various models)
-* **Web Framework:** [Streamlit](https://streamlit.io/)
-* **Data Handling:** [Pandas](https://pandas.pydata.org/), [NumPy](https://numpy.org/)
-* **Visualization:** [Plotly](https://plotly.com/python/)
-* **Sample Datasets:** [Scikit-learn](https://scikit-learn.org/stable/)
-* **Configuration:** PyYAML
+## ✨ Key Features
 
----
+### 🔄 Flexible Data Input
+```
+# Supported file formats:
+✓ CSV files
+✓ JSON documents 
+✓ Text files
+✓ Built-in scikit-learn datasets
+```
 
-## ⚙️ Setup and Installation
+### 🧠 LLM-Powered Intelligence
+```python
+# Behind the scenes, DataSense uses a configurable ensemble of LLMs:
+llm_settings:
+  models_to_use:
+    - "meta-llama/Llama-3.1-8B-Instruct"
+    - "Qwen/Qwen2.5-7B-Instruct"
+    - "microsoft/phi-3-mini-128k-instruct"
+  loading_strategy: "sequential"  # or "concurrent" for high-VRAM systems
+  sampling_params:
+    temperature: 0.1
+    top_p: 0.95
+    max_tokens: 4096
+    n: 3  # Number of samples per model for pass@k
+```
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [https://github.com/your-username/datasense.git](https://github.com/your-username/datasense.git) # Replace with your repo URL
-    cd datasense
-    ```
+### 📈 Smart Visualization Selection
+DataSense doesn't just show a single visualization—it presents the **top 3 recommended chart types** based on LLM consensus voting, then automatically generates the winning visualization using Plotly.
 
-2.  **Create a Virtual Environment (Recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
+### 📝 Automatic Data Storytelling
+Each visualization comes with:
+- **Data Insights** - Key statistical findings and patterns
+- **Data Story** - A narrative explanation that makes complex relationships understandable
 
-3.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    * **Important:** `vLLM` installation can be complex and depends heavily on your CUDA version and GPU hardware. Please refer to the [official vLLM installation guide](https://docs.vllm.ai/en/latest/getting_started/installation.html) if you encounter issues. Ensure your PyTorch version matches your CUDA toolkit.
+### 🔍 Manual Exploration
+Want to try a different chart type? The "Manual Visualization Explorer" lets you select and generate any suitable visualization identified during analysis.
 
-4.  **Configure DataSense:**
-    * Edit the `config.yaml` file.
-    * **`llm_settings`**:
-        * `models_to_use`: List the Hugging Face model IDs you want in the ensemble (ensure they are compatible with vLLM and accessible).
-        * `loading_strategy`: Choose `'sequential'` (loads models one by one, less VRAM) or `'concurrent'` (loads all models at once, faster, requires high VRAM).
-        * `gpu_memory_utilization_per_model`: Adjust GPU memory fraction per model (especially relevant for `concurrent` mode).
-        * `num_gpus`: Set the number of GPUs vLLM should use (`tensor_parallel_size`).
-        * `sampling_params`: Configure LLM generation parameters like `temperature`, `top_p`, `max_tokens`, and `n` (number of samples per model for pass@k).
-    * **`visualization_settings` / `data_settings`**: Adjust defaults if needed.
+## 🚀 Quick Start
 
----
-
-## ▶️ Running the Application
-
-Once the setup is complete, run the Streamlit application from the project's root directory:
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/ctrl-gaurav/DataSense.git
+cd DataSense
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Running DataSense
+
+```bash
+# Launch the Streamlit app
 streamlit run app.py
-Open the URL provided by Streamlit (usually http://localhost:8501) in your web browser.📖 UsageSelect Data Source: Use the sidebar to either "Upload File" (CSV, JSON, TXT) or select a "Sample Dataset".Preview Data: A preview of the loaded data will appear on the main page.Analyze: Click the "✨ Analyze and Visualize" button in the sidebar.View Results: DataSense will:Show processing status and progress.Display the Top 1-3 recommended visualization types.Show the interactive plot for the primary recommendation.Present the generated "Data Insights" and "Data Story" below the plot.Offer a "Manual Visualization Explorer" to generate other suitable plots.Provide expanders for LLM voting details, metadata, and considered options.🔧 Configuration (config.yaml)The config.yaml file controls key aspects of DataSense:llm_settings: Defines which LLMs to use, how they are loaded (sequentially or concurrently), GPU allocation, and generation parameters (temperature, top_p, max tokens, sampling count n).visualization_settings: Placeholder for future visualization-specific settings.data_settings: Controls data analysis parameters like correlation thresholds, preview sizes, and categorical detection heuristics.🤝 ContributingContributions are welcome! If you'd like to contribute, please feel free to fork the repository, make your changes, and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.(Optional: Add more specific contribution guidelines, e.g., coding standards, testing procedures)🧑‍💻 Team / AuthorsGaurav SrivastavaAafiya HussainNajibul SarkerZaber Hakim📜 CitationIf you use DataSense in your research or work, please cite it as follows:Plain Text:Srivastava, G., Hussain, A., Sarker, N., & Hakim, Z. (2025). DataSense: An Intelligent Data Visualization and Story Generator. [Software]. Available from [https://github.com/your-username/datasense](https://github.com/your-username/datasense)
-BibTeX:@software{DataSense2025,
+```
+
+Navigate to the URL provided by Streamlit (typically http://localhost:8501).
+
+### Using DataSense in 3 Simple Steps
+
+1. **Choose Your Data**:
+   - Upload a CSV, JSON, or TXT file
+   - Or select from the built-in sample datasets
+
+2. **Analyze Your Data**:
+   - Click the "✨ Analyze and Visualize" button
+   - Watch as DataSense processes your information
+
+3. **Explore the Results**:
+   - View the top visualization recommendations
+   - Read the auto-generated data story
+   - Try different chart types in the Manual Explorer
+
+## ⚙️ Configuration Options
+
+DataSense is highly configurable via the `config.yaml` file:
+
+```yaml
+# Key configuration options
+llm_settings:
+  # Models to include in your ensemble (must be compatible with vLLM)
+  models_to_use:
+    - "meta-llama/Llama-3.1-8B-Instruct"
+    - "Qwen/Qwen2.5-7B-Instruct" 
+    - "microsoft/phi-3-mini-128k-instruct"
+  
+  # Choose loading strategy based on your hardware
+  loading_strategy: "sequential"  # Less VRAM, loads one model at a time
+  # loading_strategy: "concurrent"  # Faster, but requires more VRAM
+  
+  # GPU resource allocation
+  gpu_memory_utilization_per_model: 0.85
+  num_gpus: 1  # Tensor parallel size for vLLM
+  
+  # LLM generation parameters
+  sampling_params:
+    temperature: 0.1
+    top_p: 0.95
+    max_tokens: 4096
+    n: 3  # Number of samples per model for pass@k
+
+data_settings:
+  # Data analysis parameters
+  correlation_threshold: 0.7
+  max_rows_preview: 5
+  categorical_threshold: 10  # Max unique values to consider a column categorical
+```
+
+## 💻 Code Examples
+
+### Loading and Processing Data
+
+```python
+# From utils.py - How DataSense loads different file types
+def load_uploaded_file(uploaded_file):
+    """Load data from an uploaded file based on its extension."""
+    try:
+        file_ext = uploaded_file.name.split('.')[-1].lower()
+        
+        if file_ext == 'csv':
+            return pd.read_csv(uploaded_file)
+        elif file_ext == 'json':
+            return pd.read_json(uploaded_file)
+        elif file_ext == 'txt':
+            # Try to parse as CSV first, with flexible delimiter detection
+            try:
+                return pd.read_csv(uploaded_file, sep=None, engine='python')
+            except:
+                # Fall back to reading as plain text
+                content = uploaded_file.getvalue().decode('utf-8')
+                return pd.DataFrame({'text': [content]})
+        else:
+            raise ValueError(f"Unsupported file extension: .{file_ext}")
+    except Exception as e:
+        st.error(f"Error loading file: {e}")
+        return None
+```
+
+### LLM Analysis Flow
+
+```python
+# Simplified version of the LLM processing flow
+def process_dataframe(self, df, dataset_name, progress_bar=None):
+    # Update progress
+    if progress_bar: progress_bar.progress(0.1, text="Preprocessing data...")
+    
+    # Preprocess and analyze the data
+    processed_df, metadata = self.preprocess_data(df)
+    
+    # Build a prompt based on the data analysis
+    if progress_bar: progress_bar.progress(0.3, text="Building LLM prompt...")
+    prompt = self.build_visualization_prompt(processed_df, metadata)
+    
+    # Generate responses from multiple LLMs
+    if progress_bar: progress_bar.progress(0.4, text="Running LLM ensemble...")
+    responses = self.generate_from_ensemble(prompt)
+    
+    # Analyze votes across all LLM responses
+    if progress_bar: progress_bar.progress(0.7, text="Analyzing LLM recommendations...")
+    votes, visualization_options = self.count_visualization_votes(responses)
+    
+    # Generate the final visualization and story
+    if progress_bar: progress_bar.progress(0.8, text="Creating visualization & story...")
+    top_viz = self.get_top_visualization(votes)
+    story = self.generate_visualization_story(processed_df, top_viz, metadata)
+    
+    # Return comprehensive results
+    return {
+        "success": True,
+        "processed_dataframe": processed_df,
+        "metadata": metadata,
+        "recommendation": {
+            "visualization_type": top_viz,
+            "story": story,
+            "votes": votes
+        },
+        "visualization_options": visualization_options
+    }
+```
+
+### Creating Visualizations
+
+```python
+# From visualizations.py - How DataSense creates visualizations
+def create_visualization(df, viz_type, metadata, config):
+    """Create a visualization based on the specified type and data."""
+    try:
+        # Handle different visualization types
+        if viz_type == "Scatter Plot":
+            return create_scatter_plot(df, metadata)
+        elif viz_type == "Bar Chart":
+            return create_bar_chart(df, metadata)
+        elif viz_type == "Line Chart":
+            return create_line_chart(df, metadata)
+        elif viz_type == "Histogram":
+            return create_histogram(df, metadata)
+        elif viz_type == "Box Plot":
+            return create_box_plot(df, metadata)
+        elif viz_type == "Heatmap":
+            return create_heatmap(df, metadata)
+        elif viz_type == "Pie Chart":
+            return create_pie_chart(df, metadata)
+        elif viz_type == "Violin Plot":
+            return create_violin_plot(df, metadata)
+        elif viz_type == "3D Scatter":
+            return create_3d_scatter(df, metadata)
+        else:
+            # Default to a table view if visualization type not supported
+            return None
+    except Exception as e:
+        print(f"Error creating visualization: {e}")
+        return None
+```
+
+## 🔧 Advanced Usage
+
+### Customizing LLM Models
+
+DataSense supports any LLM compatible with vLLM. To change which models are used:
+
+1. Edit the `models_to_use` list in `config.yaml`
+2. Ensure the models are available on Hugging Face and compatible with vLLM
+3. If using large models, consider adjusting GPU memory settings
+
+### GPU Optimization
+
+For best performance on resource-constrained systems:
+
+```yaml
+llm_settings:
+  # Sequential loading for systems with limited VRAM
+  loading_strategy: "sequential"
+  gpu_memory_utilization_per_model: 0.75
+  num_gpus: 1
+```
+
+For high-performance systems with multiple GPUs:
+
+```yaml
+llm_settings:
+  # Concurrent loading for faster processing
+  loading_strategy: "concurrent"
+  gpu_memory_utilization_per_model: 0.9
+  num_gpus: 2  # Adjust based on available GPUs
+```
+
+## 🤝 Contributing
+
+Contributions make the open-source community amazing! We welcome contributions of all kinds:
+
+- **Bug Reports**: File issues through GitHub Issues
+- **Feature Requests**: Share your ideas for new features
+- **Code Contributions**: Submit PRs to help improve DataSense
+- **Documentation**: Help improve explanations and examples
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting PRs.
+
+<!-- ## 👨‍💻 Development Team
+
+DataSense is brought to you by a talented team of data scientists and AI engineers:
+
+- **Gaurav Srivastava**
+- **Aafiya Hussain**
+- **Najibul Sarker**
+- **Zaber Hakim** -->
+
+## 📜 Citation
+
+If you use DataSense in your research or work, please cite:
+
+```bibtex
+@software{DataSense2025,
   author = {Srivastava, Gaurav and Hussain, Aafiya and Sarker, Najibul and Hakim, Zaber},
   title = {{DataSense: An Intelligent Data Visualization and Story Generator}},
   year = {2025},
   publisher = {GitHub},
   journal = {GitHub repository},
-  url = {[https://github.com/your-username/datasense](https://github.com/your-username/datasense)} # Replace with your actual repo URL
+  url = {https://github.com/ctrl-gaurav/DataSense}
 }
-(Remember to replace the placeholder URL with your actual repository URL)📄 LicenseThis project is licensed under the MIT License -
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <b>Ready to unleash the power of automated data visualization?</b><br>
+  Star ⭐ the repository and follow us for updates!
+</p>
