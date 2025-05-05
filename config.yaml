@@ -1,0 +1,48 @@
+# LLM Configuration
+llm_settings:
+  # List of models to use for ensemble recommendations
+  # Available models (example): "meta-llama/Llama-3.1-8B-Instruct", "Qwen/Qwen2.5-7B-Instruct", "microsoft/Phi-3-mini-4k-instruct"
+  # Add the 5 models requested by the user here
+  models_to_use:
+    # - "meta-llama/Llama-3.2-3B-Instruct"
+    - "Qwen/Qwen2.5-3B-Instruct"
+    # - "Qwen/Qwen2.5-7B-Instruct"
+    # - "microsoft/Phi-3.5-mini-instruct"
+    # - "Qwen/Qwen2.5-14B-Instruct"
+    # - "meta-llama/Llama-3.1-8B-Instruct" # Example of adding another
+
+  # Strategy for loading models: 'sequential' or 'concurrent'
+  # 'sequential': Load one model, generate, unload, load next. Slower but uses less VRAM.
+  # 'concurrent': Load all selected models at once. Faster but requires significant VRAM.
+  loading_strategy: "sequential" # or "concurrent"
+
+  # GPU memory utilization per model (applies if loading_strategy is 'concurrent')
+  # Example: allocate memory if multiple models are loaded simultaneously
+  # This needs careful tuning based on available VRAM and model sizes.
+  # The sum of utilizations should ideally be <= 1.0 per GPU if models share a GPU.
+  # VLLM handles distribution across multiple GPUs if tensor_parallel_size > 1
+  gpu_memory_utilization_per_model: 0.5 # Default if concurrent, adjust as needed
+
+  # Number of GPUs to use (passed to vLLM's tensor_parallel_size)
+  num_gpus: 1
+
+  # Sampling parameters for LLM generation
+  sampling_params:
+    temperature: 0.6
+    top_p: 0.9
+    max_tokens: 1500
+    n: 5 # Number of samples per model (pass@5)
+
+# Visualization settings
+visualization_settings:
+  # Add any specific visualization configurations if needed later
+  default_color_scheme: "plotly" # e.g., plotly, ggplot2, seaborn, etc.
+
+# Data settings
+data_settings:
+  max_rows_preview: 5
+  max_string_length_preview: 50
+  numeric_correlation_threshold: 0.5
+  categorical_threshold_ratio: 0.5 # Ratio of unique values to rows to be considered categorical
+  max_categorical_values_display: 10 # Max unique categorical values to list in stats
+
